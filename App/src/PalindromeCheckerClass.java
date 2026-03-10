@@ -1,9 +1,33 @@
 import java.util.Scanner;
-import java.util.Stack;
-import java.util.Queue;
-import java.util.LinkedList;
 
-class UseCase6PalindromeCheckerApp {
+class UseCase8PalindromeCheckerApp {
+
+    // Node class for Linked List
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    // Reverse linked list
+    static Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        return prev;
+    }
 
     public static void main(String[] args) {
 
@@ -13,28 +37,47 @@ class UseCase6PalindromeCheckerApp {
         System.out.print("Enter a string: ");
         String word = sc.nextLine();
 
-        // Create Stack and Queue
-        Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
+        // Convert string to linked list
+        Node head = null;
+        Node tail = null;
 
-        // Push into stack and enqueue into queue
         for (int i = 0; i < word.length(); i++) {
-            char ch = word.charAt(i);
-            stack.push(ch);
-            queue.add(ch);
+            Node newNode = new Node(word.charAt(i));
+
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
         }
+
+        // Find middle using fast and slow pointer
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse second half
+        Node secondHalf = reverse(slow);
+
+        Node firstHalf = head;
+        Node temp = secondHalf;
 
         boolean isPalindrome = true;
 
-        // Compare dequeue from queue and pop from stack
-        for (int i = 0; i < word.length(); i++) {
-            char fromStack = stack.pop();
-            char fromQueue = queue.remove();
-
-            if (fromStack != fromQueue) {
+        // Compare halves
+        while (temp != null) {
+            if (firstHalf.data != temp.data) {
                 isPalindrome = false;
                 break;
             }
+            firstHalf = firstHalf.next;
+            temp = temp.next;
         }
 
         // Print result
