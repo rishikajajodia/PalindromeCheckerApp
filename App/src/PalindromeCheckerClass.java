@@ -1,32 +1,43 @@
 import java.util.Scanner;
+import java.util.Stack;
 
-public class PalindromeCheckerClass {
+// Palindrome service class
+class PalindromeChecker {
 
-    public static boolean isPalindrome(String str) {
-        // Normalize string: remove spaces and convert to lowercase
-        str = str.replaceAll("\\s+", "").toLowerCase();
+    public boolean checkPalindrome(String input) {
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
 
-        int left = 0;
-        int right = str.length() - 1;
+        Stack<Character> stack = new Stack<>();
 
-        while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) {
+        // Push characters into stack
+        for (int i = 0; i < normalized.length(); i++) {
+            stack.push(normalized.charAt(i));
+        }
+
+        // Compare with original
+        for (int i = 0; i < normalized.length(); i++) {
+            if (normalized.charAt(i) != stack.pop()) {
                 return false;
             }
-            left++;
-            right--;
         }
+
         return true;
     }
+}
+
+// Main application
+public class PalindromeCheckerClass {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        PalindromeChecker checker = new PalindromeChecker();
+
         System.out.print("Enter a string: ");
         String input = sc.nextLine();
 
-        if (isPalindrome(input)) {
-            System.out.println("The string is a palindrome (ignoring spaces and case).");
+        if (checker.checkPalindrome(input)) {
+            System.out.println("The string is a palindrome.");
         } else {
             System.out.println("The string is not a palindrome.");
         }
