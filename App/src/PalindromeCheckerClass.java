@@ -1,90 +1,40 @@
 import java.util.Scanner;
 
-class UseCase8PalindromeCheckerApp {
+public class PalindromeCheckerClass {
 
-    // Node class for Linked List
-    static class Node {
-        char data;
-        Node next;
+    // Recursive method to check palindrome
+    public static boolean isPalindrome(String str, int start, int end) {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    // Reverse linked list
-    static Node reverse(Node head) {
-        Node prev = null;
-        Node current = head;
-        Node next = null;
-
-        while (current != null) {
-            next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
+        // Base Condition
+        if (start >= end) {
+            return true;
         }
 
-        return prev;
+        // If characters don't match
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
+        }
+
+        // Recursive Call
+        return isPalindrome(str, start + 1, end - 1);
     }
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
-        // Take input from user
         System.out.print("Enter a string: ");
-        String word = sc.nextLine();
+        String input = sc.nextLine();
 
-        // Convert string to linked list
-        Node head = null;
-        Node tail = null;
+        // Convert to lowercase and remove spaces
+        input = input.replaceAll("\\s+", "").toLowerCase();
 
-        for (int i = 0; i < word.length(); i++) {
-            Node newNode = new Node(word.charAt(i));
+        boolean result = isPalindrome(input, 0, input.length() - 1);
 
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // Find middle using fast and slow pointer
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Reverse second half
-        Node secondHalf = reverse(slow);
-
-        Node firstHalf = head;
-        Node temp = secondHalf;
-
-        boolean isPalindrome = true;
-
-        // Compare halves
-        while (temp != null) {
-            if (firstHalf.data != temp.data) {
-                isPalindrome = false;
-                break;
-            }
-            firstHalf = firstHalf.next;
-            temp = temp.next;
-        }
-
-        // Print result
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome");
+        if (result) {
+            System.out.println("The string is a Palindrome.");
         } else {
-            System.out.println(word + " is not a Palindrome");
+            System.out.println("The string is NOT a Palindrome.");
         }
 
         sc.close();
